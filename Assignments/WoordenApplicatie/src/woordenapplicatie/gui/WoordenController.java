@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.TreeSet;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -69,27 +70,39 @@ public class WoordenController implements Initializable {
     // Return the total amount of words and the amount of different words
     @FXML
     private void aantalAction(ActionEvent event) {
-        
+
         // Get list of words
         ArrayList<String> numberOfWords = getInputTextList();
 
         //Empty output textfield
         taOutput.setText("");
-        
+
         // Add total number of word to the output field
         taOutput.setText("Totaal aantal woorden: " + numberOfWords.size() + "\n");
-        
+
         // Add list to treeset 
         TreeSet<String> numberOfUniqueWords = new TreeSet<>();
         numberOfUniqueWords.addAll(numberOfWords);
-        
+
         // Add number of unique words to the output field
         taOutput.setText(taOutput.getText() + "Aantal verschillende woorden: " + numberOfUniqueWords.size());
     }
 
     @FXML
     private void sorteerAction(ActionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet.");
+
+        // Create a Treeset with reversed order and add input list
+        TreeSet<String> numberOfUniqueWords = new TreeSet<>(Collections.reverseOrder());
+        numberOfUniqueWords.addAll(getInputTextList());
+
+        //Empty output textfield
+        taOutput.setText("");
+
+        // Display each word
+        numberOfUniqueWords.stream().forEach((word) -> {
+            taOutput.setText(taOutput.getText() + word + "\n");
+        });
+
     }
 
     @FXML
@@ -100,7 +113,7 @@ public class WoordenController implements Initializable {
 
         //Empty output textfield
         taOutput.setText("");
-        
+
         // Generate a list of word frequencies
         Set<String> unique = new HashSet<String>(numberOfWords);
         for (String key : unique) {
@@ -110,7 +123,16 @@ public class WoordenController implements Initializable {
 
     @FXML
     private void concordatieAction(ActionEvent event) {
-        throw new UnsupportedOperationException("Not supported yet.");
+        TreeMap<String, ArrayList<Integer>> concordance = new TreeMap<>();
+
+        for (String word : getInputTextList()) {
+            if (concordance.containsKey(word)) {
+                //concordance.put(word, concordance.get(word) + 1);
+            } else {
+                //concordance.put(word, 1);
+            }
+        }
+
     }
 
     private ArrayList<String> getInputTextList() {
@@ -119,7 +141,7 @@ public class WoordenController implements Initializable {
 
         ArrayList<String> list = new ArrayList<>(Arrays.asList(numberOfWords));
         list.removeAll(Arrays.asList("", null));
-        
+
         return list;
     }
 
