@@ -80,7 +80,7 @@ public class WoordenController implements Initializable {
         // Add total number of word to the output field
         taOutput.setText("Totaal aantal woorden: " + numberOfWords.size() + "\n");
 
-        // Add list to treeset 
+        // Add list to treeset
         TreeSet<String> numberOfUniqueWords = new TreeSet<>();
         numberOfUniqueWords.addAll(numberOfWords);
 
@@ -102,7 +102,6 @@ public class WoordenController implements Initializable {
         numberOfUniqueWords.stream().forEach((word) -> {
             taOutput.setText(taOutput.getText() + word + "\n");
         });
-
     }
 
     @FXML
@@ -123,25 +122,55 @@ public class WoordenController implements Initializable {
 
     @FXML
     private void concordatieAction(ActionEvent event) {
+
+        // Create new treemap
         TreeMap<String, ArrayList<Integer>> concordance = new TreeMap<>();
 
-        for (String word : getInputTextList()) {
-            if (concordance.containsKey(word)) {
-                //concordance.put(word, concordance.get(word) + 1);
-            } else {
-                //concordance.put(word, 1);
+        // Split text in lines
+        String[] inputText = taInput.getText().split("[\\r\\n]");
+        ArrayList<Integer> inputLine = new ArrayList<>();
+
+        // Go through each line 
+        for (int i = 0; i < inputText.length; i++) {
+
+            // Split input textbox 
+            String[] numberOfWords = inputText[i].split("\\.|\\,|\\s+");
+
+            // Remove empty string from the list
+            ArrayList<String> wordList = new ArrayList<>(Arrays.asList(numberOfWords));
+            wordList.removeAll(Arrays.asList("", null));
+
+            // Check each word
+            for (String word : wordList) {
+                if (concordance.containsKey(word)) {
+                    // If a word already excists in the map then add the current line to the list
+                    inputLine = concordance.get(word);
+                    inputLine.add(i + 1);
+                    concordance.put(word, inputLine);
+                } else {
+                    // If its a new word add it to the map
+                    inputLine = new ArrayList<>();
+                    inputLine.add(i + 1);
+                    concordance.put(word, inputLine);
+                }
             }
         }
+
+        // Show concordance in the output textfield
+        taOutput.setText(concordance.toString());
 
     }
 
     private ArrayList<String> getInputTextList() {
+
         // Split input textbox 
         String[] numberOfWords = taInput.getText().split("\\.|\\,|[\\r\\n]+|\\s+");
 
+        // Remove empty string from the list
         ArrayList<String> list = new ArrayList<>(Arrays.asList(numberOfWords));
         list.removeAll(Arrays.asList("", null));
 
+        // Return new list
         return list;
     }
 
