@@ -92,21 +92,17 @@ public class WoordenController implements Initializable {
 
     @FXML
     private void sorteerAction(ActionEvent event) {
-
-        // Create a Treeset with reversed order and add input list
-        ArrayList<String> sortedWords = new ArrayList<>();
-        sortedWords.addAll(getSortedWords(getInputTextList(taInput.getText())));
-
-        Collections.sort(sortedWords);
-        Collections.reverse(sortedWords);
         
         //Empty output textfield
         taOutput.clear();
+        
+        // Create a Treeset with reversed order and add input list
+        ArrayList<String> sortedWords = getSortedWords(getInputTextList(taInput.getText()));
 
-        // Display each word
-        sortedWords.stream().forEach((word) -> {
-            taOutput.setText(taOutput.getText() + word + "\n");
-        });
+        //Display the output
+        for(String data : sortedWords){
+            taOutput.setText(taOutput.getText() + data);
+        }
     }
 
     @FXML
@@ -117,6 +113,7 @@ public class WoordenController implements Initializable {
         
         ArrayList<String> frequencyData = getWordFrequency(getInputTextList(taInput.getText()));
         
+        //Display the output
         for(String data : frequencyData){
             taOutput.setText(taOutput.getText() + data);
         }
@@ -144,12 +141,21 @@ public class WoordenController implements Initializable {
         return ts;
     }
 
-    public TreeSet<String> getSortedWords(ArrayList<String> numberOfWords) {
+    public ArrayList<String> getSortedWords(ArrayList<String> numberOfWords) {
 
+        ArrayList<String> sortedWords = new ArrayList<>();
+        
         TreeSet<String> ts = new TreeSet<>(Collections.reverseOrder());
         ts.addAll(numberOfWords);
+        
+        ts.stream().forEach((word) -> {
+            sortedWords.add(word + "\n");
+        });
+        
+        Collections.sort(sortedWords);
+        Collections.reverse(sortedWords);
 
-        return ts;
+        return sortedWords;
     }
 
     public ArrayList<String> getWordFrequency(ArrayList<String> numberOfWords) {

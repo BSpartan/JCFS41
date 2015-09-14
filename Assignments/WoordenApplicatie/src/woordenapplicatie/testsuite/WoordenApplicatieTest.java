@@ -66,17 +66,11 @@ public class WoordenApplicatieTest {
                                 "Lindenlaan\n" +
                                 "Lientje\n";
         
-        TreeSet<String> sortedWords = w.getSortedWords(inputList);
-        
-        ArrayList<String> actualOutputList = new ArrayList<>();
         String actualOutput = "";
         
-        sortedWords.stream().forEach((word) -> {
-            actualOutputList.add(word + "\n");
-        });
-        
-        for(String line : actualOutputList){
-            actualOutput += line;
+        ArrayList<String> frequencyData = w.getSortedWords(inputList);
+        for (String data : frequencyData) {
+            actualOutput += data;
         }
         
         Assert.assertEquals("Given sorted output does not equal expected output", expectedOutput, actualOutput);
@@ -126,8 +120,6 @@ public class WoordenApplicatieTest {
                              "langs de lange Lindenlaan\n" +
                              "maar toen Lotje niet wou lopen\n" +
                              "toen liet Lientje Lotje staan. ";
-        
-        ArrayList<String> inputList = w.getInputTextList(inputString);
         
         String expectedOutput = "{Lientje=[1, 4], Lindenlaan=[2], Lotje=[1, 3, 4], de=[2], lange=[2], langs=[2], leerde=[1], liet=[4], lopen=[1, 3], maar=[3], niet=[3], staan=[4], toen=[3, 4], wou=[3]}";
         
