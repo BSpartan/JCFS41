@@ -72,7 +72,7 @@ public class WoordenController implements Initializable {
     private void aantalAction(ActionEvent event) {
 
         // Get list of words
-        ArrayList<String> numberOfWords = getInputTextList();
+        ArrayList<String> numberOfWords = getInputTextList(taInput.getText());
 
         //Empty output textfield
         taOutput.setText("");
@@ -91,7 +91,7 @@ public class WoordenController implements Initializable {
     private void sorteerAction(ActionEvent event) {
 
         // Create a Treeset with reversed order and add input list
-        TreeSet<String> sortedWords = getSortedWords();
+        TreeSet<String> sortedWords = getSortedWords(getInputTextList(taInput.getText()));
 
         //Empty output textfield
         taOutput.setText("");
@@ -106,7 +106,7 @@ public class WoordenController implements Initializable {
     private void frequentieAction(ActionEvent event) {
 
         // Get list of words
-        ArrayList<String> numberOfWords = getInputTextList();
+        ArrayList<String> numberOfWords = getInputTextList(taInput.getText());
 
         //Empty output textfield
         taOutput.setText("");
@@ -122,7 +122,7 @@ public class WoordenController implements Initializable {
     private void concordatieAction(ActionEvent event) {
 
         // Create new treemap
-        TreeMap<String, ArrayList<Integer>> concordance = getConcordanceTreeMap();
+        TreeMap<String, ArrayList<Integer>> concordance = getConcordanceTreeMap(taInput.getText());
 
         // Show concordance in the output textfield
         taOutput.setText(concordance.toString());
@@ -137,10 +137,10 @@ public class WoordenController implements Initializable {
         return ts;
     }
     
-    public TreeSet<String> getSortedWords(){
+    public TreeSet<String> getSortedWords(ArrayList<String> numberOfWords){
         
         TreeSet<String> ts = new TreeSet<>(Collections.reverseOrder());
-        ts.addAll(getInputTextList());
+        ts.addAll(numberOfWords);
         
         return ts;
     }
@@ -152,12 +152,12 @@ public class WoordenController implements Initializable {
         return hs;
     }
     
-    public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(){
+    public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(String text){
         
         TreeMap<String, ArrayList<Integer>> tm = new TreeMap<>();
 
         // Split text in lines
-        String[] inputText = taInput.getText().split("[\\r\\n]");
+        String[] inputText = text.split("[\\r\\n]");
         ArrayList<Integer> inputLine = new ArrayList<>();
 
         // Go through each line 
@@ -189,10 +189,10 @@ public class WoordenController implements Initializable {
         return tm;
     }
 
-    private ArrayList<String> getInputTextList() {
+    public ArrayList<String> getInputTextList(String input) {
 
         // Split input textbox 
-        String[] numberOfWords = taInput.getText().split("\\.|\\,|[\\r\\n]+|\\s+");
+        String[] numberOfWords = input.split("\\.|\\,|[\\r\\n]+|\\s+");
 
         // Remove empty string from the list
         ArrayList<String> list = new ArrayList<>(Arrays.asList(numberOfWords));
