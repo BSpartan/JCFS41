@@ -112,8 +112,8 @@ public class WoordenController implements Initializable {
         taOutput.setText("");
 
         // Generate a list of word frequencies
-        Set<String> unique = new HashSet<String>(numberOfWords);
-        for (String key : unique) {
+        Set<String> frequencySet = getWordFrequency(numberOfWords);
+        for (String key : frequencySet) {
             taOutput.setText(taOutput.getText() + key + ": " + Collections.frequency(numberOfWords, key) + "\n");
         }
     }
@@ -122,37 +122,7 @@ public class WoordenController implements Initializable {
     private void concordatieAction(ActionEvent event) {
 
         // Create new treemap
-        TreeMap<String, ArrayList<Integer>> concordance = new TreeMap<>();
-
-        // Split text in lines
-        String[] inputText = taInput.getText().split("[\\r\\n]");
-        ArrayList<Integer> inputLine = new ArrayList<>();
-
-        // Go through each line 
-        for (int i = 0; i < inputText.length; i++) {
-
-            // Split input textbox 
-            String[] numberOfWords = inputText[i].split("\\.|\\,|\\s+");
-
-            // Remove empty string from the list
-            ArrayList<String> wordList = new ArrayList<>(Arrays.asList(numberOfWords));
-            wordList.removeAll(Arrays.asList("", null));
-
-            // Check each word
-            for (String word : wordList) {
-                if (concordance.containsKey(word)) {
-                    // If a word already excists in the map then add the current line to the list
-                    inputLine = concordance.get(word);
-                    inputLine.add(i + 1);
-                    concordance.put(word, inputLine);
-                } else {
-                    // If its a new word add it to the map
-                    inputLine = new ArrayList<>();
-                    inputLine.add(i + 1);
-                    concordance.put(word, inputLine);
-                }
-            }
-        }
+        TreeMap<String, ArrayList<Integer>> concordance = getConcordanceTreeMap();
 
         // Show concordance in the output textfield
         taOutput.setText(concordance.toString());
@@ -173,6 +143,13 @@ public class WoordenController implements Initializable {
         ts.addAll(getInputTextList());
         
         return ts;
+    }
+    
+    public HashSet<String> getWordFrequency(ArrayList<String> numberOfWords){
+        
+        HashSet<String> hs = new HashSet<>(numberOfWords);
+        
+        return hs;
     }
 
     private ArrayList<String> getInputTextList() {
