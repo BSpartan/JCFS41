@@ -151,6 +151,43 @@ public class WoordenController implements Initializable {
         
         return hs;
     }
+    
+    public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(){
+        
+        TreeMap<String, ArrayList<Integer>> tm = new TreeMap<>();
+
+        // Split text in lines
+        String[] inputText = taInput.getText().split("[\\r\\n]");
+        ArrayList<Integer> inputLine = new ArrayList<>();
+
+        // Go through each line 
+        for (int i = 0; i < inputText.length; i++) {
+
+            // Split input textbox 
+            String[] numberOfWords = inputText[i].split("\\.|\\,|\\s+");
+
+            // Remove empty string from the list
+            ArrayList<String> wordList = new ArrayList<>(Arrays.asList(numberOfWords));
+            wordList.removeAll(Arrays.asList("", null));
+
+            // Check each word
+            for (String word : wordList) {
+                if (tm.containsKey(word)) {
+                    // If a word already excists in the map then add the current line to the list
+                    inputLine = tm.get(word);
+                    inputLine.add(i + 1);
+                    tm.put(word, inputLine);
+                } else {
+                    // If its a new word add it to the map
+                    inputLine = new ArrayList<>();
+                    inputLine.add(i + 1);
+                    tm.put(word, inputLine);
+                }
+            }
+        }
+        
+        return tm;
+    }
 
     private ArrayList<String> getInputTextList() {
 
