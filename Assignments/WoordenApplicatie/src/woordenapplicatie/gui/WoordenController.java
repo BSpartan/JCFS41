@@ -91,14 +91,13 @@ public class WoordenController implements Initializable {
     private void sorteerAction(ActionEvent event) {
 
         // Create a Treeset with reversed order and add input list
-        TreeSet<String> numberOfUniqueWords = new TreeSet<>(Collections.reverseOrder());
-        numberOfUniqueWords.addAll(getInputTextList());
+        TreeSet<String> sortedWords = getSortedWords();
 
         //Empty output textfield
         taOutput.setText("");
 
         // Display each word
-        numberOfUniqueWords.stream().forEach((word) -> {
+        sortedWords.stream().forEach((word) -> {
             taOutput.setText(taOutput.getText() + word + "\n");
         });
     }
@@ -164,6 +163,14 @@ public class WoordenController implements Initializable {
         
         TreeSet<String> ts = new TreeSet<>();
         ts.addAll(numberOfWords);
+        
+        return ts;
+    }
+    
+    public TreeSet<String> getSortedWords(){
+        
+        TreeSet<String> ts = new TreeSet<>(Collections.reverseOrder());
+        ts.addAll(getInputTextList());
         
         return ts;
     }
