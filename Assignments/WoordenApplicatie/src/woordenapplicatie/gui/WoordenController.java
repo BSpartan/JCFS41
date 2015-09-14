@@ -81,8 +81,7 @@ public class WoordenController implements Initializable {
         taOutput.setText("Totaal aantal woorden: " + numberOfWords.size() + "\n");
 
         // Add list to treeset
-        TreeSet<String> numberOfUniqueWords = new TreeSet<>();
-        numberOfUniqueWords.addAll(numberOfWords);
+        TreeSet<String> numberOfUniqueWords = getUniqueWords(numberOfWords);
 
         // Add number of unique words to the output field
         taOutput.setText(taOutput.getText() + "Aantal verschillende woorden: " + numberOfUniqueWords.size());
@@ -160,6 +159,14 @@ public class WoordenController implements Initializable {
         taOutput.setText(concordance.toString());
 
     }
+    
+    public TreeSet<String> getUniqueWords(ArrayList<String> numberOfWords){
+        
+        TreeSet<String> ts = new TreeSet<>();
+        ts.addAll(numberOfWords);
+        
+        return ts;
+    }
 
     private ArrayList<String> getInputTextList() {
 
@@ -173,5 +180,4 @@ public class WoordenController implements Initializable {
         // Return new list
         return list;
     }
-
 }
