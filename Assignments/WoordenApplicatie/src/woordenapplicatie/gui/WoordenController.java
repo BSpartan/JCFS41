@@ -8,9 +8,12 @@ package woordenapplicatie.gui;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.ResourceBundle;
 import java.util.Set;
 import java.util.TreeMap;
@@ -75,7 +78,7 @@ public class WoordenController implements Initializable {
         ArrayList<String> numberOfWords = getInputTextList(taInput.getText());
 
         //Empty output textfield
-        taOutput.setText("");
+        taOutput.clear();
 
         // Add total number of word to the output field
         taOutput.setText("Totaal aantal woorden: " + numberOfWords.size() + "\n");
@@ -94,7 +97,7 @@ public class WoordenController implements Initializable {
         TreeSet<String> sortedWords = getSortedWords(getInputTextList(taInput.getText()));
 
         //Empty output textfield
-        taOutput.setText("");
+        taOutput.clear();
 
         // Display each word
         sortedWords.stream().forEach((word) -> {
@@ -109,13 +112,40 @@ public class WoordenController implements Initializable {
         ArrayList<String> numberOfWords = getInputTextList(taInput.getText());
 
         //Empty output textfield
-        taOutput.setText("");
+        taOutput.clear();
 
         // Generate a list of word frequencies
         Set<String> frequencySet = getWordFrequency(numberOfWords);
+
+        // Create a treemap to sortfrequencies
+        TreeMap<String, Integer> unsortedFrequencies = new TreeMap<>();
+
         for (String key : frequencySet) {
-            taOutput.setText(taOutput.getText() + key + ": " + Collections.frequency(numberOfWords, key) + "\n");
+            unsortedFrequencies.put(key, Collections.frequency(numberOfWords, key));
         }
+
+        // Create a comparator to sort the values from the map entry
+        Comparator<Map.Entry<String, Integer>> byMapValues = new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> left, Map.Entry<String, Integer> right) {
+                return left.getValue().compareTo(right.getValue());
+            }
+        };
+
+        // A list with sorted map Entrys
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<Map.Entry<String, Integer>>();
+
+        // add all Entrys
+        sortedList.addAll(unsortedFrequencies.entrySet());
+
+        // sort the collection using the comparator we just made
+        Collections.sort(sortedList, byMapValues);
+
+        // show the correct output values
+        for (Map.Entry<String, Integer> entrySet : sortedList) {
+            taOutput.setText(taOutput.getText() + entrySet.getKey() + " = " + entrySet.getValue() + "\n");
+        }
+
     }
 
     @FXML
@@ -124,36 +154,39 @@ public class WoordenController implements Initializable {
         // Create new treemap
         TreeMap<String, ArrayList<Integer>> concordance = getConcordanceTreeMap(taInput.getText());
 
-        // Show concordance in the output textfield
-        taOutput.setText(concordance.toString());
-
-    }
-    
-    public TreeSet<String> getUniqueWords(ArrayList<String> numberOfWords){
+        taOutput.clear();
         
+        // Show concordance in the output textfield
+        for (Map.Entry<String, ArrayList<Integer>> entrySet : concordance.entrySet()) {
+            taOutput.setText(taOutput.getText() + entrySet.getKey() + " = " + entrySet.getValue().toString() + "\n");
+        }
+    }
+
+    public TreeSet<String> getUniqueWords(ArrayList<String> numberOfWords) {
+
         TreeSet<String> ts = new TreeSet<>();
         ts.addAll(numberOfWords);
-        
+
         return ts;
     }
-    
-    public TreeSet<String> getSortedWords(ArrayList<String> numberOfWords){
-        
+
+    public TreeSet<String> getSortedWords(ArrayList<String> numberOfWords) {
+
         TreeSet<String> ts = new TreeSet<>(Collections.reverseOrder());
         ts.addAll(numberOfWords);
-        
+
         return ts;
     }
-    
-    public HashSet<String> getWordFrequency(ArrayList<String> numberOfWords){
-        
+
+    public HashSet<String> getWordFrequency(ArrayList<String> numberOfWords) {
+
         HashSet<String> hs = new HashSet<>(numberOfWords);
-        
+
         return hs;
     }
-    
-    public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(String text){
-        
+
+    public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(String text) {
+
         TreeMap<String, ArrayList<Integer>> tm = new TreeMap<>();
 
         // Split text in lines
@@ -185,7 +218,7 @@ public class WoordenController implements Initializable {
                 }
             }
         }
-        
+
         return tm;
     }
 
