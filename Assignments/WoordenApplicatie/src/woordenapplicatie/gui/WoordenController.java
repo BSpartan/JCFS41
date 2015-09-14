@@ -94,8 +94,12 @@ public class WoordenController implements Initializable {
     private void sorteerAction(ActionEvent event) {
 
         // Create a Treeset with reversed order and add input list
-        TreeSet<String> sortedWords = getSortedWords(getInputTextList(taInput.getText()));
+        ArrayList<String> sortedWords = new ArrayList<>();
+        sortedWords.addAll(getSortedWords(getInputTextList(taInput.getText())));
 
+        Collections.sort(sortedWords);
+        Collections.reverse(sortedWords);
+        
         //Empty output textfield
         taOutput.clear();
 
