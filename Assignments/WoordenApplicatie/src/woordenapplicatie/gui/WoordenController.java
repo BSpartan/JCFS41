@@ -111,45 +111,15 @@ public class WoordenController implements Initializable {
 
     @FXML
     private void frequentieAction(ActionEvent event) {
-
-        // Get list of words
-        ArrayList<String> numberOfWords = getInputTextList(taInput.getText());
-
+        
         //Empty output textfield
         taOutput.clear();
-
-        // Generate a list of word frequencies
-        Set<String> frequencySet = getWordFrequency(numberOfWords);
-
-        // Create a treemap to sortfrequencies
-        TreeMap<String, Integer> unsortedFrequencies = new TreeMap<>();
-
-        for (String key : frequencySet) {
-            unsortedFrequencies.put(key, Collections.frequency(numberOfWords, key));
+        
+        ArrayList<String> frequencyData = getWordFrequency(getInputTextList(taInput.getText()));
+        
+        for(String data : frequencyData){
+            taOutput.setText(taOutput.getText() + data);
         }
-
-        // Create a comparator to sort the values from the map entry
-        Comparator<Map.Entry<String, Integer>> byMapValues = new Comparator<Map.Entry<String, Integer>>() {
-            @Override
-            public int compare(Map.Entry<String, Integer> left, Map.Entry<String, Integer> right) {
-                return left.getValue().compareTo(right.getValue());
-            }
-        };
-
-        // A list with sorted map Entrys
-        List<Map.Entry<String, Integer>> sortedList = new ArrayList<Map.Entry<String, Integer>>();
-
-        // add all Entrys
-        sortedList.addAll(unsortedFrequencies.entrySet());
-
-        // sort the collection using the comparator we just made
-        Collections.sort(sortedList, byMapValues);
-
-        // show the correct output values
-        for (Map.Entry<String, Integer> entrySet : sortedList) {
-            taOutput.setText(taOutput.getText() + entrySet.getKey() + " = " + entrySet.getValue() + "\n");
-        }
-
     }
 
     @FXML
@@ -182,11 +152,40 @@ public class WoordenController implements Initializable {
         return ts;
     }
 
-    public HashSet<String> getWordFrequency(ArrayList<String> numberOfWords) {
+    public ArrayList<String> getWordFrequency(ArrayList<String> numberOfWords) {
 
+        ArrayList<String> frequencyData = new ArrayList<>();
         HashSet<String> hs = new HashSet<>(numberOfWords);
 
-        return hs;
+        // Create a treemap to sortfrequencies
+        TreeMap<String, Integer> unsortedFrequencies = new TreeMap<>();
+
+        for (String key : hs) {
+            unsortedFrequencies.put(key, Collections.frequency(numberOfWords, key));
+        }
+
+        // Create a comparator to sort the values from the map entry
+        Comparator<Map.Entry<String, Integer>> byMapValues = new Comparator<Map.Entry<String, Integer>>() {
+            @Override
+            public int compare(Map.Entry<String, Integer> left, Map.Entry<String, Integer> right) {
+                return left.getValue().compareTo(right.getValue());
+            }
+        };
+
+        // A list with sorted map Entrys
+        List<Map.Entry<String, Integer>> sortedList = new ArrayList<Map.Entry<String, Integer>>();
+
+        // add all Entrys
+        sortedList.addAll(unsortedFrequencies.entrySet());
+
+        // sort the collection using the comparator we just made
+        Collections.sort(sortedList, byMapValues);
+
+        for (Map.Entry<String, Integer> entrySet : sortedList) {
+            frequencyData.add(entrySet.getKey() + " = " + entrySet.getValue() + "\n");
+        }
+        
+        return frequencyData;
     }
 
     public TreeMap<String, ArrayList<Integer>> getConcordanceTreeMap(String text) {

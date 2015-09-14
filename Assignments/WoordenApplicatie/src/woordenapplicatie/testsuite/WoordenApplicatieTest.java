@@ -93,26 +93,26 @@ public class WoordenApplicatieTest {
         
         ArrayList<String> inputList = w.getInputTextList(inputString);
         
-        String expectedOutput = "Lientje: 2\n" +
-                                "de: 1\n" +
-                                "staan: 1\n" +
-                                "lange: 1\n" +
-                                "leerde: 1\n" +
-                                "Lotje: 3\n" +
-                                "lopen: 2\n" +
-                                "toen: 2\n" +
-                                "maar: 1\n" +
-                                "Lindenlaan: 1\n" +
-                                "niet: 1\n" +
-                                "langs: 1\n" +
-                                "wou: 1\n" +
-                                "liet: 1\n";
+        String expectedOutput = "Lindenlaan = 1\n" +
+                                "de = 1\n" +
+                                "lange = 1\n" +
+                                "langs = 1\n" +
+                                "leerde = 1\n" +
+                                "liet = 1\n" +
+                                "maar = 1\n" +
+                                "niet = 1\n" +
+                                "staan = 1\n" +
+                                "wou = 1\n" +
+                                "Lientje = 2\n" +
+                                "lopen = 2\n" +
+                                "toen = 2\n" +
+                                "Lotje = 3\n";
         
         String actualOutput = "";
         
-        Set<String> frequencySet = w.getWordFrequency(inputList);
-        for (String key : frequencySet) {
-            actualOutput += key + ": " + Collections.frequency(inputList, key) + "\n";
+        ArrayList<String> frequencyData = w.getWordFrequency(inputList);
+        for (String data : frequencyData) {
+            actualOutput += data;
         }
         
         Assert.assertEquals("Given frequency output does not equal expected output", expectedOutput, actualOutput);
